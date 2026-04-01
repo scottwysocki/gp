@@ -25,11 +25,6 @@ const { useState } = React;
 const RATE = 150;
 const INCLUDED_HRS = 12;
 
-const Logo = () => (
-  <img src="https://i.postimg.cc/MKSh7kn4/Gov-Pilot-mark.png" alt="GovPilot" style={{height:52}}
-    onError={e => { e.target.style.display='none'; e.target.nextSibling.style.display='inline'; }} />
-);
-
 function SOWGenerator() {
   const [step, setStep] = useState("form");
   const [docType, setDocType] = useState("sow");
@@ -65,14 +60,16 @@ Return ONLY valid JSON:
 {"name":"Other (QA)","details":["- Quality Assurance in Live"],"hours":1.0}
 ]}
 Be specific with field names, report names, templates from transcript. Realistic hours: DB fields 1-3hrs, reports 0.5-1hr each, mail merges 0.25hr each, forms 1-3hrs, QA 1hr.`;
+
     try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST", headers: {"Content-Type":"application/json"},
-        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:4000, messages:[{role:"user",content:prompt}] })
+      const res = await fetch("/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 4000, messages: [{ role: "user", content: prompt }] })
       });
       const data = await res.json();
-      const text = data.content?.find(b => b.type==="text")?.text || "";
-      const clean = text.replace(/```json|```/g,"").trim();
+      const text = data.content?.find(b => b.type === "text")?.text || "";
+      const clean = text.replace(/```json|```/g, "").trim();
       const parsed = JSON.parse(clean);
       parsed.originalHours = originalHours;
       setSowData(parsed); setOverridePrice(null); setOverrideNote(""); setShowOverride(false); setStep("result");
@@ -108,7 +105,7 @@ Be specific with field names, report names, templates from transcript. Realistic
   if (step==="form") return (
     <div style={{fontFamily:ff,maxWidth:700,margin:"0 auto",padding:"24px 16px"}}>
       <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:24}}>
-        <Logo /><span style={{display:"none",fontSize:22,fontWeight:700,color:"#FF7143"}}>GovPilot</span>
+        <img src="https://i.postimg.cc/MKSh7kn4/Gov-Pilot-mark.png" alt="GovPilot" style={{height:52}} onError={e=>{e.target.style.display='none';}}/>
         <div>
           <div style={{fontSize:20,fontWeight:700,color:"#262F3D"}}>GovPilot SOW Generator</div>
           <div style={{fontSize:13,color:"#666"}}>AI-assisted configuration work order drafting</div>
@@ -147,7 +144,7 @@ Be specific with field names, report names, templates from transcript. Realistic
   if (step==="generating") return (
     <div style={{fontFamily:ff,maxWidth:700,margin:"0 auto",padding:"80px 16px",textAlign:"center"}}>
       <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
-      <Logo /><span style={{display:"none",fontSize:22,fontWeight:700,color:"#FF7143"}}>GovPilot</span>
+      <img src="https://i.postimg.cc/MKSh7kn4/Gov-Pilot-mark.png" alt="GovPilot" style={{height:52}} onError={e=>{e.target.style.display='none';}}/>
       <div style={{marginTop:20,fontSize:18,fontWeight:600,color:"#262F3D"}}>Drafting your {docType==="change_order"?"Change Order":"SOW"}...</div>
       <div style={{marginTop:8,color:"#666",fontSize:14}}>Analyzing transcript and generating configuration work order</div>
       <div style={{width:40,height:40,border:"4px solid #e2e8f0",borderTop:"4px solid #FF7143",borderRadius:"50%",animation:"spin 1s linear infinite",margin:"24px auto 0"}}/>
@@ -184,7 +181,7 @@ Be specific with field names, report names, templates from transcript. Realistic
       <div style={{background:"#fff",border:"1px solid #e2e8f0",borderRadius:10,padding:32}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:32}}>
           <div style={{display:"flex",alignItems:"center",gap:14}}>
-            <Logo /><span style={{display:"none",fontSize:22,fontWeight:700,color:"#FF7143"}}>GovPilot</span>
+            <img src="https://i.postimg.cc/MKSh7kn4/Gov-Pilot-mark.png" alt="GovPilot" style={{height:52}} onError={e=>{e.target.style.display='none';}}/>
             <span style={{fontSize:28,fontWeight:700,color:"#FF7143"}}>{isChangeOrder?"Change Order":"Configuration"}</span>
           </div>
           <div style={{textAlign:"right",fontSize:13,color:"#444",lineHeight:1.8}}>
